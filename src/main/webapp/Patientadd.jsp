@@ -1,84 +1,140 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+
+<%@ page import="com.dao.HospitalDAO" %>
+
+<%
+HospitalDAO dao = new HospitalDAO();
+
+int nextId = dao.getNextPatientId();
+%>
+
 <!DOCTYPE html>
+
 <html>
+
 <head>
+
 <meta charset="UTF-8">
-<title>Hospital Management System</title>
+
+<title>Add Patient</title>
 
 <style>
+
 body {
-    font-family: 'Segoe UI', Arial;
-    margin: 0;
-    background: linear-gradient(to right, #d8a7b1, #f8f8f8);
+
+    font-family:'Segoe UI', Arial;
+    margin:0;
+    background:linear-gradient(to right, #d8a7b1, #f8f8f8);
 }
-/* Header */
+
+/* HEADER */
+
 .header {
-    margin: 20px auto;
-    max-width: 900px;
-    padding: 20px;
 
-    background: rgba(255, 255, 255, 0.25);  /* glass effect */
-    backdrop-filter: blur(10px);
+    margin:20px auto;
+    max-width:500px;
+    padding:20px;
+    text-align:center;
 
-    border-radius: 20px;
-    text-align: center;
-    color: #5a0000;   /* maroon text */
+    background:rgba(255,255,255,0.25);
 
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-/* Container */
-.container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 25px;
-    padding: 40px;
-    max-width: 900px;
-    margin: 50px auto;
+    backdrop-filter:blur(10px);
 
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-/* Cards */
-.card {
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 40px;
-    text-align: center;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    transition: 0.3s;
-}.card:hover {
-    transform: translateY(-5px);
+    border-radius:20px;
+
+    color:#5a0000;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
 
-/* Buttons */
-.card a {
-    display: inline-block;
-    margin-top: 15px;
-    padding: 10px 18px;
+/* FORM BOX */
 
-    background: linear-gradient(to right, #800000, #a00000);
-    color: white;
+.form-box {
 
-    text-decoration: none;
-    border-radius: 25px;
+    background:rgba(255,255,255,0.3);
 
-    font-weight: bold;
-    transition: all 0.3s ease;
+    backdrop-filter:blur(10px);
+
+    padding:25px;
+
+    width:400px;
+
+    margin:30px auto;
+
+    border-radius:20px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.2);
 }
 
-.card a:hover {
-    background: linear-gradient(to right, #a00000, #800000);
-    transform: scale(1.05);
+/* INPUTS */
+
+input, select {
+
+    width:90%;
+
+    padding:10px;
+
+    margin:10px;
+
+    border-radius:20px;
+
+    border:1px solid #ccc;
+
+    outline:none;
 }
-/* Message */
-.msg {
-    text-align: center;
-    margin-top: 15px;
-    font-size: 16px;
+
+/* BUTTON */
+
+input[type="submit"] {
+
+    background:#800000;
+
+    color:white;
+
+    border:none;
+
+    cursor:pointer;
+
+    border-radius:25px;
+
+    font-weight:bold;
 }
+
+input[type="submit"]:hover {
+
+    background:#a00000;
+}
+
+/* LABELS */
+
+label {
+
+    margin-left:10px;
+
+    font-weight:bold;
+
+    color:#5a0000;
+}
+
+/* BACK LINK */
+
+a {
+
+    display:block;
+
+    text-align:center;
+
+    margin-top:20px;
+
+    text-decoration:none;
+
+    color:#800000;
+
+    font-weight:bold;
+}
+
+
 </style>
 
 </head>
@@ -86,62 +142,204 @@ body {
 <body>
 
 <div class="header">
-    <h1>🏥 Hospital Management System</h1>
-    <p>Manage Patients, Records & Reports Efficiently</p>
+
+    <h2>➕ Add Patient</h2>
+
+    <p>Enter patient details below</p>
+
 </div>
 
-<!-- MESSAGE DISPLAY -->
-<%
-String msg = request.getParameter("msg");
+<div class="form-box">
 
-if ("success".equals(msg)) {
-%>
-    <div class="msg" style="color:green;">✔ Patient Added Successfully</div>
-<%
-} else if ("fail".equals(msg)) {
-%>
-    <div class="msg" style="color:red;">✖ Insert Failed</div>
-<%
-} else if ("error".equals(msg)) {
-%>
-    <div class="msg" style="color:red;">⚠ Something went wrong</div>
-<%
+<form action="AddPatientServlet" method="post">
+
+    <!-- AUTO ID -->
+
+    <label>Patient ID:</label>
+
+    <input type="text" value="<%=nextId%>" readonly>
+
+    <!-- NAME -->
+
+    <label>Patient Name:</label>
+
+    <input type="text"
+           name="name"
+           placeholder="Patient Name"
+           required>
+
+    <!-- GENDER -->
+
+    <label>Gender:</label>
+
+    <select name="gender" required>
+
+        <option value="">Select Gender</option>
+
+        <option value="Male">Male</option>
+
+        <option value="Female">Female</option>
+
+        <option value="Other">Other</option>
+
+    </select>
+
+    <!-- WEIGHT -->
+
+    <label>Weight (kg):</label>
+
+    <input type="number"
+       step="0.1"
+       min="1"
+       name="weight"
+       placeholder="Weight"
+       required>
+
+    <!-- DOB -->
+
+    <label>Date of Birth:</label>
+
+    <input type="date"
+           name="dob"
+           required>
+
+    <!-- AILMENT -->
+
+   <label>Ailment:</label>
+
+<select name="ailment"
+        id="ailment"
+        onchange="showOtherDisease()"
+        required>
+
+    <option value="">Select Ailment</option>
+
+    <option value="Fever">Fever</option>
+
+    <option value="Cold & Cough">Cold & Cough</option>
+
+    <option value="Diabetes">Diabetes</option>
+
+    <option value="Hypertension">Hypertension</option>
+
+    <option value="Asthma">Asthma</option>
+
+    <option value="Heart Disease">Heart Disease</option>
+
+    <option value="Migraine">Migraine</option>
+
+    <option value="Allergy">Allergy</option>
+
+    <option value="Typhoid">Typhoid</option>
+
+    <option value="Dengue">Dengue</option>
+
+    <option value="Malaria">Malaria</option>
+
+    <option value="Fracture">Fracture</option>
+
+    <option value="Skin Infection">Skin Infection</option>
+
+    <option value="COVID-19">COVID-19</option>
+
+    <option value="Other">Other</option>
+
+</select>
+
+<!-- Hidden textbox -->
+
+<input type="text"
+       id="otherDisease"
+       name="otherDisease"
+       placeholder="Enter Disease Name"
+       style="display:none;">
+    <!-- DOCTOR -->
+
+    <label>Assigned Doctor:</label>
+
+   <select name="doctor" onchange="showOtherDoctor()" required>
+
+    <option value="">Select Doctor</option>
+
+    <option>Dr. Smith</option>
+    <option>Dr. John</option>
+    <option>Dr. Priya</option>
+    <option>Dr. Raj</option>
+    <option>Dr. Meena</option>
+
+    <option value="Other">Other</option>
+
+</select>
+
+<input type="text"
+       id="otherDoctor"
+       name="otherDoctor"
+       placeholder="Enter Doctor Name"
+       style="display:none; margin-top:10px;">
+    <!-- SUBMIT -->
+
+    <input type="submit"
+           value="Add Patient">
+
+</form>
+
+</div>
+
+<a href="index.jsp">⬅ Back to Home</a>
+
+<!-- JAVASCRIPT HERE -->
+
+<script>
+
+function showOtherDisease(){
+
+    var ailment =
+        document.getElementById("ailment").value;
+
+    var otherBox =
+        document.getElementById("otherDisease");
+
+    if(ailment === "Other"){
+
+        otherBox.style.display = "block";
+
+        otherBox.required = true;
+
+    }else{
+
+        otherBox.style.display = "none";
+
+        otherBox.required = false;
+    }
 }
-%>
 
-<div class="container">
+</script>
+<script>
+function showOtherDoctor() {
 
-    <div class="card">
-        <h3>Add Patient</h3>
-        <p>Register new patient details</p>
-        <a href="patientadd.jsp">Open</a>
-    </div>
+    var doctor =
+        document.getElementsByName("doctor")[0].value;
 
-    <div class="card">
-        <h3>Update Patient</h3>
-        <p>Modify existing patient data</p>
-        <a href="patientupdate.jsp">Open</a>
-    </div>
+    var otherBox =
+        document.getElementById("otherDoctor");
 
-    <div class="card">
-        <h3>Delete Patient</h3>
-        <p>Remove patient records</p>
-        <a href="patientdelete.jsp">Open</a>
-    </div>
+    if(doctor === "Other") {
 
-    <div class="card">
-        <h3>View Patients</h3>
-        <p>See all patient information</p>
-        <a href="DisplayPatientsServlet">Open</a>
-    </div>
+        otherBox.style.display = "block";
+        otherBox.required = true;
 
-    <div class="card">
-        <h3>Reports</h3>
-        <p>Generate reports by date, doctor, or disease</p>
-        <a href="reports.jsp">Open</a>
-    </div>
+    } else {
 
-</div>
+        otherBox.style.display = "none";
+        otherBox.required = false;
+    }
+}
+</script>
 
 </body>
 </html>
+
+</body>
+
+</html>
+
